@@ -1,6 +1,8 @@
 # Ansible: Offline DevOps Environment (WIP)
 
-Install the following on RHEL / CentOS servers.
+[![Build Status](https://travis-ci.org/deskoh/devops-ansible.svg?branch=master)](https://travis-ci.org/deskoh/devops-ansible)
+
+Install the following on CentOS servers.
 
 * Jenkins Master and Slaves
 * JFrog Artifactory / yum repo
