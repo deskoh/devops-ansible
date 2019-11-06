@@ -6,12 +6,13 @@
     mode: 0755
 
 - name: copy nginx config
-  become: no
   copy:
     src: nginx
-    dest: "{{ repo_data_dir }}/nginx"
-- become: no
-  template:
+    dest: "{{ repo_data_dir }}"
+- file:
+    path: "{{ repo_data_dir }}/nginx/conf.d"
+    state: directory
+- template:
     src: artifactory.conf.j2
     dest: "{{ repo_data_dir }}/nginx/conf.d/artifactory.conf"
     backup: yes
