@@ -1,0 +1,16 @@
+---
+- name: get user with uid 1000
+  getent:
+    database: passwd
+    key: "1000"
+
+- name: change ownership of /var/jenkins_home
+  file:
+    path: /var/jenkins_home
+    owner: "{{ lookup('dict', getent_passwd).key }}"
+
+- name: copy Jenkins startup script
+  copy:
+    src: jenkins.sh
+    dest: "/tmp/jenkins.sh"
+    mode: 0755

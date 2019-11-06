@@ -1,0 +1,34 @@
+###############################################################################
+# Tasks to create named user with specified uid if uid does not exist.
+# Example usage:
+# - import_tasks: create-user-by-uid.yml
+#   vars:
+#     uid: "1030"
+#     uname: artifactory
+###############################################################################
+- name: "Get uid with {{ uid }}"
+  shell: "id {{ uid }}"
+  ignore_errors: True
+  register: uid_result
+
+- name: "Create user with uid {{ uid }} if not exists"
+  user:
+    name: "{{ uname }}"
+    uid: " {{ uid }}"
+  when: uid_result.rc != 0
+
+# - name: Get user with uid
+#   getent:
+#     database: passwd
+#     key: "{{ uid }}"
+
+# - name: Add user with uid to root
+#   user:
+#     name: "{{ lookup('dict', getent_passwd).key }}"
+#     groups: root
+#     append: yes
+
+# - name: Change ownership of data directory to uid
+#   file:
+#     path: "{{ dir }}"
+#     owner: "{{ lookup('dict', getent_passwd).key }}"

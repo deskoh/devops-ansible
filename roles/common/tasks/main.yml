@@ -1,0 +1,27 @@
+---
+- name: configure hostname
+  import_tasks: hostname.yml
+
+- name: configure DNS and search domains
+  import_tasks: dns.yml
+
+- name: disable default yum repo
+  import_tasks: disable-default-repo.yml
+
+- name: configure yum mirror repo
+  import_tasks: yum-mirror.yml
+  vars:
+    - baseurl: "file://{{local_yum_path}}"
+    - filename: local
+  when: yum_inventory_hostname != inventory_hostname
+- import_tasks: yum-mirror.yml
+  vars:
+    - baseurl: "{{ yum_server_url }}"
+    - filename: CentOS-Base-Mirror
+  when: yum_inventory_hostname == inventory_hostname
+
+# - name: Set authorized key for user1
+#   authorized_key:
+#     user: user1
+#     state: present
+#     key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}"

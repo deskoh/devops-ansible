@@ -1,0 +1,6 @@
+---
+- name: creating physical volume
+  import_tasks: create-pv.yml
+
+- name: creating logical volume
+  import_tasks: create-lv.yml

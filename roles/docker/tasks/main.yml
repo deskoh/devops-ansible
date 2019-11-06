@@ -1,0 +1,49 @@
+---
+- name: get docker version
+  shell: docker version | grep Version | awk '{print $2}'
+  register: docker_version
+
+- name: copy docker rpm file to server
+  copy:
+    src: "{{ item }}"
+    dest: "/tmp/{{ item }}"
+  with_items:
+    - containerd.io-1.2.10-3.2.el7.x86_64.rpm
+    - docker-ce-19.03.4-3.el7.x86_64.rpm
+    - docker-ce-cli-19.03.4-3.el7.x86_64.rpm
+  when: docker_version.stdout == ''
+
+- name: installing docker
+  yum:
+    name: "{{ packages }}"
+    state: present
+
+  vars:
+    packages:
+      - /tmp/containerd.io-1.2.10-3.2.el7.x86_64.rpm
+      - /tmp/docker-ce-19.03.4-3.el7.x86_64.rpm
+      - /tmp/docker-ce-cli-19.03.4-3.el7.x86_64.rpm
+  when: docker_version.stdout == ''
+
+- name: start service docker, if not started
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: adding {{ ansible_user_id }} to `docker` group
+  become: no
+  user:
+    name: "{{ ansible_user_id }}"
+    groups: docker
+    append: true
+
+- name: copy Docker daemon configuration.
+  template:
+      src: daemon.json.j2
+      dest: /etc/docker/daemon.json
+      owner: root
+      group: root
+      backup: yes
+  notify:
+    - reload docker

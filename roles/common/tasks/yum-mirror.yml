@@ -1,0 +1,14 @@
+---
+- name: configure yum repo {{ yum_server_url }}
+  yum_repository:
+    file: CentOS-Base-Mirror
+    name: "{{ item.name }}-mirror"
+    description: "CentOS-$releasever - {{ item.description }}"
+    baseurl: "{{ yum_server_url }}/centos-{{ item.name }}"
+    gpgcheck: no
+    # gpgkey: "{{ yum_server_url }}/rpm-gpg/RPM-GPG-KEY-centos-{{ item.name }}"
+    enabled: yes
+  loop:
+    - { name: base, description: Base }
+    - { name: updates, description: Updates }
+    - { name: extras, description: Extras }

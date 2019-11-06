@@ -1,0 +1,15 @@
+---
+- name: create partition spanning whole disk as new physical volume
+  parted:
+    device: "{{ pv_device }}"
+    number: 1
+    part_type: primary
+    flags: [lvm]
+    state: present
+  when: pv_device is not none
+
+- name: create data volume group on partition /dev/sdb1
+  lvg:
+    vg: "{{ data_vg_name }}"
+    pvs: "{{ pv_device }}1"
+  when: pv_device is not none

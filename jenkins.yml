@@ -1,0 +1,15 @@
+- hosts: jenkins-master
+  become: yes
+  roles:
+    - common
+    - logical-volume
+    - docker
+    - jenkins
+
+- hosts: jenkins_slaves
+  become: yes
+  roles:
+    - common
+    - logical-volume
+    - docker
+    - jenkins

@@ -1,0 +1,14 @@
+---
+- name: disable default yum repositories
+  yum_repository:
+    file: CentOS-Base
+    name: "{{ item.name }}"
+    description: "CentOS-$releasever - {{ item.description }}"
+    mirrorlist: "http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo={{ item.mirrorlist }}&infra=$infra"
+    gpgcheck: yes
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+    enabled: no
+  loop:
+    - { name: base, description: Base, mirrorlist: os }
+    - { name: updates, description: Updates, mirrorlist: updates }
+    - { name: extras, description: Extras, mirrorlist: extras }

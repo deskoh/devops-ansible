@@ -1,0 +1,28 @@
+- name: install latest version of Apache
+  yum:
+    name: httpd
+    state: latest
+
+- name: start Apache, if not started
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+
+- name: configure firewall
+  firewalld:
+    service: http
+    permanent: yes
+    state: enabled
+
+- name: create symlink
+  file:
+    src: "{{ local_yum_path }}"
+    dest: /var/www/html/yum
+    state: link
+
+- name: allow apache to serve files in {{ local_yum_path }}
+  sefcontext:
+    target: "{{ local_yum_path }}"
+    setype:  httpd_sys_rw_content_t
+    state: present

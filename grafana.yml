@@ -1,0 +1,6 @@
+- hosts: grafana
+  become: yes
+  roles:
+    - common
+    - logical-volume
+    - docker

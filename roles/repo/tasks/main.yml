@@ -1,0 +1,48 @@
+---
+- name: copy artifactory startup script
+  copy:
+    src: artifactory.sh
+    dest: "/tmp/artifactory.sh"
+    mode: 0755
+
+- name: copy nginx config
+  become: no
+  copy:
+    src: nginx
+    dest: "{{ repo_data_dir }}/nginx"
+- become: no
+  template:
+    src: artifactory.conf.j2
+    dest: "{{ repo_data_dir }}/nginx/conf.d/artifactory.conf"
+    backup: yes
+
+- name: create directories for docker volume mounts
+  become: no
+  file:
+    path: "{{ repo_data_dir }}/{{ item }}"
+    state: directory
+  loop:
+    - artifactory
+    - postgresql
+
+- name: create user with uid 1030 if it does not exists.
+  import_tasks: create-user-by-uid.yml
+  vars:
+    uid: "1030"
+    uname: artifactory
+
+- name: get user with uid 1030
+  getent:
+    database: passwd
+    key: "1030"
+
+- name: changing ownership of {{ repo_data_dir }}/artifactory
+  file:
+    path: "{{ repo_data_dir }}/artifactory"
+    owner: "{{ lookup('dict', getent_passwd).key }}"
+
+- name: configure firewall
+  firewalld:
+    service: http
+    permanent: yes
+    state: enabled

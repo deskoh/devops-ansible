@@ -1,0 +1,30 @@
+---
+- name: create a logical volumes for var_lib_docker and jenkins
+  lvol:
+    vg: "{{ data_vg_name }}"
+    lv: "{{ item.name }}"
+    size: "{{ item.size }}"
+  loop: "{{ lv_config }}"
+
+- name: create a xfs filesystem on logical volumes
+  filesystem:
+    fstype: xfs
+    dev: "/dev/{{ data_vg_name }}/{{ item.name }}"
+  loop: "{{ lv_config }}"
+
+- name: mount path to logical volume
+  become: "{{ become | default('yes') }}"
+  mount:
+    path: "{{ item.path }}"
+    src: "/dev/{{ data_vg_name }}/{{ item.name }}"
+    fstype: xfs
+    state: mounted
+  loop: "{{ lv_config }}"
+
+- name: change ownership of directory to {{ ansible_user_id }}
+  become: no
+  file:
+    path: "{{ item.path }}"
+    owner: "{{ ansible_user_id }}"
+  when: item.become | default(false) == false
+  loop: "{{ lv_config }}"

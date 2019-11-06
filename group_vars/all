@@ -1,0 +1,22 @@
+---
+# DNS configuration
+domain_name: dev.local
+dns_servers: ['130.8.20.130']
+
+# Inventory hostname to configure local repo instead of remote repo
+yum_inventory_hostname: repo
+
+# Local yum repo path on repo host, directory should contains centos-{base, updates, extras}.
+# Path should not end with trailing slash
+local_yum_path: /data1/fileserver/yum
+
+# The yum remote repo base url, directory should contains centos-{base, updates, extras}.
+# url should not contain trailing slash
+yum_server_url: http://130.8.20.135/yum
+
+# The LVM volume group to create new logical volumes on
+data_vg_name: vg_data
+
+# Insecure registries for docker daemon to use HTTP instead of HTTPS
+insecure_registries:
+  - docker.repo.{{ domain_name }}

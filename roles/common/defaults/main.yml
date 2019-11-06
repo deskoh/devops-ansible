@@ -1,0 +1,7 @@
+---
+dns_servers: ['8.8.8.8', '8.8.4.4']
+domain_name: "localdomain"
+dns_searchs:
+  - "{{domain_name}}"
+dns_options: []
+yum_server_url: http://repo/yum
