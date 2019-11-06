@@ -21,10 +21,9 @@
     state: mounted
   loop: "{{ lv_config }}"
 
-# - name: change ownership of directory to {{ ansible_user_id }}
-#   become: no
-#   file:
-#     path: "{{ item.path }}"
-#     owner: "{{ ansible_user_id }}"
-#   when: item.become | default(false) == false
-#   loop: "{{ lv_config }}"
+- name: change ownership of directory if required
+  file:
+    path: "{{ item.path }}"
+    owner: "{{ lv_config.uid | string }}"
+  when: item.uid | default('') != ''
+  loop: "{{ lv_config }}"

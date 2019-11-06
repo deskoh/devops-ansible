@@ -18,7 +18,6 @@
     backup: yes
 
 - name: create directories for docker volume mounts
-  become: no
   file:
     path: "{{ repo_data_dir }}/{{ item }}"
     state: directory
@@ -32,15 +31,10 @@
     uid: "1030"
     uname: artifactory
 
-- name: get user with uid 1030
-  getent:
-    database: passwd
-    key: "1030"
-
 - name: changing ownership of {{ repo_data_dir }}/artifactory
   file:
     path: "{{ repo_data_dir }}/artifactory"
-    owner: "{{ lookup('dict', getent_passwd).key }}"
+    owner: "1030"
 
 - name: configure firewall
   firewalld:
