@@ -1,6 +1,6 @@
 ---
 # DNS configuration
-domain_name: dev.local
+domain_name: dev.pc8.dsta
 dns_servers: ['130.8.20.130']
 
 # Inventory hostname to configure local repo instead of remote repo
@@ -21,3 +21,7 @@ data_vg_name: vg_data
 insecure_registries:
   - docker.repo.{{ domain_name }}
   - docker.{{ domain_name }}
+
+# Private docker registry url to pull image from
+# URL should end with the trailing slash
+docker_registry: docker.{{ domain_name }}/

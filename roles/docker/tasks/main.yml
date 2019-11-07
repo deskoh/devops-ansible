@@ -31,12 +31,12 @@
     state: started
     enabled: yes
 
-- name: adding {{ ansible_user_id }} to `docker` group
-  become: no
-  user:
-    name: "{{ ansible_user_id }}"
-    groups: docker
-    append: true
+# - name: adding {{ ansible_user_id }} to `docker` group
+#   become: no
+#   user:
+#     name: "{{ ansible_user_id }}"
+#     groups: docker
+#     append: true
 
 - name: copy Docker daemon configuration.
   template:

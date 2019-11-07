@@ -14,7 +14,7 @@ Install the following on RHEL / CentOS servers.
 
 ```yml
 # Domain name of servers
-domain_name: dev.local
+domain_name: dev.pc8.dsta
 
 # DNS servers
 dns_servers: ['130.8.20.130']
@@ -35,6 +35,11 @@ data_vg_name: vg_data
 # Insecure registries for docker daemon to use HTTP instead of HTTPS
 insecure_registries:
   - docker.repo.{{ domain_name }}
+  - docker.{{ domain_name }}
+
+# Private docker registry url to pull image from
+# URL should end with the trailing slash
+docker_registry: docker.{{ domain_name }}/
 ```
 
 ### Group Variables: `jenkins_slaves`
@@ -81,7 +86,7 @@ repo_data_dir: /data1
 
 ```
 
-## Cheatsheet
+## SSH Keys setup
 
 ```sh
 # Create RSA key pair on host

@@ -9,8 +9,16 @@
     path: /var/jenkins_home
     owner: "{{ lookup('dict', getent_passwd).key }}"
 
-- name: copy Jenkins startup script
-  copy:
-    src: jenkins.sh
-    dest: "/tmp/jenkins.sh"
-    mode: 0755
+- name: deploy Jenkins Master startup script
+  template:
+      src: jenkins.sh.j2
+      dest: /tmp/jenkins.sh
+      mode: "0755"
+  when: '"slave" not in inventory_hostname'
+
+- name: deploy Jenkins Agent startup script
+  template:
+      src: jenkins-agent.sh.j2
+      dest: /tmp/jenkins.sh
+      mode: "0755"
+  when: '"slave" in inventory_hostname'

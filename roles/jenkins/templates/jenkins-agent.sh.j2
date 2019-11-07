@@ -1,0 +1,5 @@
+docker run -d --name jenkins-agent --restart=always \
+  --group-add `stat -c %g /var/run/docker.sock` \
+  -v /var/jenkins_home:/var/jenkins_home \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  {{ docker_registry }}deskoh/jenkins-agent-docker
