@@ -40,10 +40,10 @@
 
 - name: copy Docker daemon configuration.
   template:
-      src: daemon.json.j2
-      dest: /etc/docker/daemon.json
-      owner: root
-      group: root
-      backup: yes
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    backup: yes
   notify:
     - reload docker

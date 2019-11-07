@@ -88,6 +88,11 @@ repo_data_dir: /data1
 
 ```
 
+## Default Login Credentials
+
+* Jenkins: `cat /var/lib/jenkins_home/secrets/initialAdminPassword`
+* Grafana: admin / admin
+
 ## SSH Keys setup
 
 ```sh

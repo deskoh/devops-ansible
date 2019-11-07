@@ -24,6 +24,6 @@
 - name: change ownership of directory if required
   file:
     path: "{{ item.path }}"
-    owner: "{{ lv_config.uid | string }}"
+    owner: "{{ item.uid | string }}"
   when: item.uid | default('') != ''
   loop: "{{ lv_config }}"

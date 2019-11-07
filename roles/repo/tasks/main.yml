@@ -35,6 +35,7 @@
   file:
     path: "{{ repo_data_dir }}/artifactory"
     owner: "1030"
+    state: directory
 
 - name: configure firewall
   firewalld:

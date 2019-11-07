@@ -1,0 +1,24 @@
+---
+- name: creating docker mounts for grafana
+  file:
+    path: /data/grafana
+    owner: "472"
+    state: directory
+
+- name: creating docker mounts for prometheus
+  file:
+    path: /data/prometheus
+    owner: "65534"
+    state: directory
+
+- name: deploy prometheus config
+  template:
+    src: prometheus.yml.j2
+    dest: /etc/prometheus/prometheus.yml
+    mode: "65534"
+
+- name: deploy startup script
+  template:
+    src: grafana-prometheus.sh.j2
+    dest: /tmp/grafana-prometheus.sh
+    mode: "0755"

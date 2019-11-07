@@ -4,3 +4,4 @@
     - common
     - logical-volume
     - docker
+    - grafana
