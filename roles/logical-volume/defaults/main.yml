@@ -3,5 +3,5 @@
 pv_device: null
 
 # Array of logical volumes (xfs fs) to create to be mounted on specified path.
-# e.g. { path: /var/lib/docker, size: 128g, name: var_lib_docker, become: yes }
+# e.g. { path: /var/lib/docker, size: 128g, name: var_lib_docker }
 lv_config: []

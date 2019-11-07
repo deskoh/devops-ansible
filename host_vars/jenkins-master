@@ -5,5 +5,5 @@ pv_device: /dev/sdb
 
 # Logical volumes to create for bind mount
 lv_config:
-  - { path: /var/lib/docker, size: 128g, name: var_lib_docker, become: yes }
-  - { path: /var/jenkins_home, size: 120g, name: jenkins }
+  - { path: /var/lib/docker, size: 128g, name: var_lib_docker }
+  - { path: /var/jenkins_home, size: 120g, name: jenkins, uid: 1000 }

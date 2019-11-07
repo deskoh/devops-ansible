@@ -1,6 +1,8 @@
 # Ansible: Offline DevOps Environment (WIP)
 
-Install the following on RHEL / CentOS servers.
+[![Build Status](https://travis-ci.org/deskoh/devops-ansible.svg?branch=master)](https://travis-ci.org/deskoh/devops-ansible)
+
+Install the following on CentOS servers.
 
 * Jenkins Master and Slaves
 * JFrog Artifactory / yum repo
@@ -51,8 +53,8 @@ pv_device: /dev/sdb
 
 # Logical volumes to create for bind mount
 lv_config:
-  - { path: /var/lib/docker, size: 64g, name: var_lib_docker, become: yes }
-  - { path: /var/jenkins_home, size: 60g, name: jenkins }
+  - { path: /var/lib/docker, size: 64g, name: var_lib_docker }
+  - { path: /var/jenkins_home, size: 60g, name: jenkins, uid: 1000 }
 ```
 
 ### Host Variables: `jenkins-master`
@@ -65,8 +67,8 @@ pv_device: /dev/sdb
 
 # Logical volumes to create for bind mount
 lv_config:
-  - { path: /var/lib/docker, size: 128g, name: var_lib_docker, become: yes }
-  - { path: /var/jenkins_home, size: 120g, name: jenkins }
+  - { path: /var/lib/docker, size: 128g, name: var_lib_docker }
+  - { path: /var/jenkins_home, size: 120g, name: jenkins, uid: 1000 }
 
 ```
 
@@ -79,7 +81,7 @@ pv_device: null
 
 # Logical volumes to create for bind mount
 lv_config:
-  - { path: /var/lib/docker, size: 10g, name: var_lib_docker, become: yes }
+  - { path: /var/lib/docker, size: 10g, name: var_lib_docker }
 
 # The data directory to create docker volume mounts
 repo_data_dir: /data1
