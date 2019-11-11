@@ -8,6 +8,38 @@ Install the following on CentOS servers.
 * JFrog Artifactory / yum repo
 * Grafana / Prometheus
 
+## Pre-Conditions
+
+### Server List / Configuration
+
+* Jenkins Master
+
+  * Mimimum 250GB raw disk `/dev/sdb`
+
+* Jenkins Slave
+
+  * Mimimum 250GB raw disk `/dev/sdb`
+
+* Repository (JFrog Artifactory / yum)
+
+  * Volume group named `vg_data` (defined in `group_vars\all`) available.
+
+  * Local yum repository (see `group_vars\all`)
+
+* Grafana / Prometheus
+
+  * Mimimum 50GB raw disk `/dev/sdb`
+
+### DNS Entries
+
+* `jenkins`: Jenkins Master
+
+* Jenkins Slave 1 ... N
+
+* `grafana`: Grafana / Prometheus: 
+
+* `*.repo` `docker`: JFrog Artifactory
+
 ## Variables
 
  Variables in `group_vars` and `host_vars` are listed below with default values.
@@ -84,8 +116,23 @@ lv_config:
   - { path: /var/lib/docker, size: 10g, name: var_lib_docker }
 
 # The data directory to create docker volume mounts
-repo_data_dir: /data1
+docker_vol_mount_dir: /data1
+```
 
+### Host Variables: `grafana`
+
+```yml
+# The data directory to create docker volume mounts
+docker_vol_mount_dir: /data
+
+# Raw disk to create partition, physical volume and data volume group on.
+# Volume group will be named `data_vg_name`
+pv_device: /dev/sdb
+
+# Logical volumes to create for bind mount
+lv_config:
+  - { path: /var/lib/docker, size: 20g, name: var_lib_docker }
+  - { path: {{ docker_vol_mount_dir }}, size: 20g, name: lv_data }
 ```
 
 ## Default Login Credentials

@@ -8,18 +8,18 @@
 - name: copy nginx config
   copy:
     src: nginx
-    dest: "{{ repo_data_dir }}"
+    dest: "{{ docker_vol_mount_dir }}"
 - file:
-    path: "{{ repo_data_dir }}/nginx/conf.d"
+    path: "{{ docker_vol_mount_dir }}/nginx/conf.d"
     state: directory
 - template:
     src: artifactory.conf.j2
-    dest: "{{ repo_data_dir }}/nginx/conf.d/artifactory.conf"
+    dest: "{{ docker_vol_mount_dir }}/nginx/conf.d/artifactory.conf"
     backup: yes
 
 - name: create directories for docker volume mounts
   file:
-    path: "{{ repo_data_dir }}/{{ item }}"
+    path: "{{ docker_vol_mount_dir }}/{{ item }}"
     state: directory
   loop:
     - artifactory
@@ -31,9 +31,9 @@
     uid: "1030"
     uname: artifactory
 
-- name: changing ownership of {{ repo_data_dir }}/artifactory
+- name: changing ownership of {{ docker_vol_mount_dir }}/artifactory
   file:
-    path: "{{ repo_data_dir }}/artifactory"
+    path: "{{ docker_vol_mount_dir }}/artifactory"
     owner: "1030"
     state: directory
 

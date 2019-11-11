@@ -1,13 +1,13 @@
 ---
 - name: creating docker mounts for grafana
   file:
-    path: /data/grafana
+    path: "{{ docker_vol_mount_dir }}/grafana"
     owner: "472"
     state: directory
 
 - name: creating docker mounts for prometheus
   file:
-    path: /data/prometheus
+    path: "{{ docker_vol_mount_dir }}/prometheus"
     owner: "65534"
     state: directory
 
