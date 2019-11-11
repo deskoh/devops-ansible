@@ -14,11 +14,18 @@
 - name: deploy prometheus config
   template:
     src: prometheus.yml.j2
-    dest: /etc/prometheus/prometheus.yml
+    dest: /data/prometheus.yml
     mode: "65534"
+  # TODO: restart of prometheus container if changed
 
 - name: deploy startup script
   template:
     src: grafana-prometheus.sh.j2
     dest: /tmp/grafana-prometheus.sh
     mode: "0755"
+
+- name: configure firewall
+  firewalld:
+    service: http
+    permanent: yes
+    state: enabled

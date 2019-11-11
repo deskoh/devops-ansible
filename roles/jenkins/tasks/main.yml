@@ -22,3 +22,9 @@
       dest: /tmp/jenkins.sh
       mode: "0755"
   when: '"slave" in inventory_hostname'
+
+- name: configure firewall
+  firewalld:
+    service: http
+    permanent: yes
+    state: enabled

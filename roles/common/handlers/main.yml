@@ -3,3 +3,13 @@
   service:
     name: NetworkManager
     state: reloaded
+
+- name: restart node_exporter
+  service:
+    name: node_exporter
+    state: restarted
+
+- name: reload firewalld
+  service:
+    name: firewalld
+    state: reloaded

@@ -20,6 +20,9 @@
     - filename: CentOS-Base-Mirror
   when: yum_inventory_hostname == inventory_hostname
 
+- name: configure node-exporter
+  import_tasks: node-exporter.yml
+
 # - name: Set authorized key for user1
 #   authorized_key:
 #     user: user1

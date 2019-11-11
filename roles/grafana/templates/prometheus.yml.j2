@@ -7,9 +7,20 @@ global:
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ['{{ inventory_hostname }}.{{ domain_name }}:9090']
+
+  - job_name: 'grafana'
+    static_configs:
+      - targets: ['grafana.{{ domain_name }}']
 
   - job_name: 'jenkins'
     metrics_path: '/prometheus/'
     static_configs:
       - targets: ['jenkins.{{ domain_name }}']
+
+  - job_name: 'node_exporter'
+    static_configs:
+      - targets:
+{% for host in groups['all'] %}
+          - {{ host }}.{{ domain_name }}:9100
+{% endfor %}

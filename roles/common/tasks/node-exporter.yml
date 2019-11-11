@@ -1,0 +1,64 @@
+---
+- name: create node_exporter group
+  group:
+    name: node_exporter
+
+- name: create node_exporter user
+  user:
+    name: node_exporter
+    group: node_exporter
+    create_home: no
+    shell: /bin/false
+
+- name: check if node_exporter exists
+  stat:
+    path: /usr/local/bin/node_exporter
+  register: node_exporter_result
+
+# - name: copy node_exporter tar file
+#   copy:
+#     src: node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+#     dest: /tmp/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+#   when: node_exporter_result.stat.exists == false
+
+- name: extract node_exporter tar
+  unarchive:
+    src: node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+    dest: /tmp
+  when: node_exporter_result.stat.exists == false
+
+- name: copy node_exporter to /usr/bin
+  copy:
+    src: /tmp/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter
+    dest: /usr/local/bin/node_exporter
+    owner: node_exporter
+    group: node_exporter
+    remote_src: yes
+    mode: "0755"
+  when: node_exporter_result.stat.exists == false
+
+- name: clean up node_exporter
+  file:
+    path: /tmp/node_exporter-{{ node_exporter_version }}-amd64
+    state: absent
+  when: node_exporter_result.stat.exists == true
+
+- name: deploy node_exporter.service file
+  template:
+    src: node_exporter.service.j2
+    dest: /etc/systemd/system/node_exporter.service
+  notify:
+    - reload node_exporter
+
+- name: start node_exporter
+  service:
+    name: node_exporter
+    state: started
+    enabled: yes
+
+- name: configure firewall to allow 9100
+  firewalld:
+    port: 9100/tcp
+    permanent: yes
+    state: enabled
+  notify: reload firewalld

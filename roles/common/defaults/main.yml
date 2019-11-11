@@ -5,3 +5,6 @@ dns_searchs:
   - "{{domain_name}}"
 dns_options: []
 yum_server_url: http://repo/yum
+
+# to resolve node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+node_exporter_version: "0.18.1"

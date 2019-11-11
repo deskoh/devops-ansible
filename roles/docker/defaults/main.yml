@@ -1,0 +1,7 @@
+---
+# used to resolve containerd.io-{{ containerd_version }}.el7.x86_64.rpm
+containerd_version: "1.2.10-3.2"
+
+# used to resolve docker-ce-{{ docker_version }}-3.el7.x86_64.rpm and
+#                 docker-ce-cli-{{ docker_version }}-3.el7.x86_64.rpm
+docker_version: "19.03.4"

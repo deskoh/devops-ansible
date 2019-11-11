@@ -1,4 +1,5 @@
 - hosts: ansible-host
   become: yes
+  gather_facts: no
   roles:
     - common
