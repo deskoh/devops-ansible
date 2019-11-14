@@ -1,8 +1,8 @@
 {
-  "insecure-registries" : ["{{ insecure_registries | list | join('\", \"') }}"]
+  "insecure-registries" : ["{{ insecure_registries | list | join('\", \"') }}"],
   "log-driver": "json-file",
   "log-opts": {
     "max-size": "{{ log_max_size }}",
-    "max-file": "{{ log_max_size }}"
+    "max-file": "{{ log_max_file }}"
   }
 }

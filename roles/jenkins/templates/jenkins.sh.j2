@@ -1,6 +1,6 @@
-docker run -d --name jenkins -p 8080:8080 -p 50000:50000 --restart=always \
+docker run -d --name jenkins -p 80:8080 -p 50000:50000 --restart=always \
   --group-add `stat -c %g /var/run/docker.sock` \
-  -e JAVA_OPTS=-Xmx=4g -Xms=4g -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -XX:+DisableExplicitGC \
+  -e JAVA_OPTS=-Xmx4g -Xms4g -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -XX:+DisableExplicitGC \
   -v /var/jenkins_home:/var/jenkins_home \
   -v /var/run/docker.sock:/var/run/docker.sock \
   {{ docker_registry }}deskoh/jenkins-docker

@@ -10,4 +10,4 @@ docker_version: "19.03.4"
 log_max_size: 10m
 
 # maximum number of log files for log rotation
-log_max_size: 3
+log_max_file: 3
