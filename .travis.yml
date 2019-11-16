@@ -24,5 +24,6 @@ install:
 
 script:
   # Basic syntax check
-  - ansible-playbook site.yml -i hosts --syntax-check
-  - ansible -i hosts -m debug -a 'var=hostvars[inventory_hostname]' all
+  - echo 'test_password' > .vault_pass
+  - ansible-playbook site.yml --syntax-check
+  - ansible -m debug -a 'var=hostvars[inventory_hostname]' all
