@@ -9,3 +9,6 @@ pv_device: /dev/sdb
 lv_config:
   - { path: /var/lib/docker, size: 20g, name: var_lib_docker }
   - { path: "{{ docker_vol_mount_dir }}", size: 20g, name: lv_data }
+
+# Enable LDAP
+grafana_enable_ldap: yes

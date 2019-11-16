@@ -8,5 +8,7 @@ docker run -d --name prometheus -p 9090:9090 --restart=always \
 
 docker run -d --name grafana -p 80:3000 --restart=always \
   --network=grafana \
+  --env-file grafana.env.list
   -v /data/grafana:/var/lib/grafana \
+  -v /data/grafana-ldap.toml:/etc/grafana/ldap.toml \
   {{ docker_registry }}grafana/grafana

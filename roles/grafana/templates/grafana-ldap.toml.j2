@@ -1,0 +1,17 @@
+[[servers]]
+host = "{{ ldap_server }}"
+port = {{ ldap_port }}
+use_ssl = false
+start_tls = false
+ssl_skip_verify = true
+bind_dn = "CORP\\%s"
+search_filter = "(sAMAccountName=%s)"
+search_base_dns = ["dc=corp,dc=local"]
+
+[servers.attributes]
+name = "givenName"
+surname = "sn"
+username = "sAMAccountName"
+member_of = "memberOf"
+email =  "mail"
+

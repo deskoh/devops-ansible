@@ -5,6 +5,13 @@
     owner: "472"
     state: directory
 
+- name: deploy grafana ldap config
+  template:
+    src: grafana-ldap.toml.j2
+    dest: "{{ docker_vol_mount_dir }}/grafana-ldap.toml"
+    mode: "472"
+  # TODO: restart of grafana container if changed
+
 - name: creating docker mounts for prometheus
   file:
     path: "{{ docker_vol_mount_dir }}/prometheus"
@@ -14,7 +21,7 @@
 - name: deploy prometheus config
   template:
     src: prometheus.yml.j2
-    dest: /data/prometheus.yml
+    dest: "{{ docker_vol_mount_dir }}/prometheus.yml"
     mode: "65534"
   # TODO: restart of prometheus container if changed
 
@@ -23,6 +30,11 @@
     src: grafana-prometheus.sh.j2
     dest: /tmp/grafana-prometheus.sh
     mode: "0755"
+
+- name: deploy grafana env var
+  template:
+    src: grafana.env.list.j2
+    dest: /tmp/grafana.env.list
 
 - name: configure firewall
   firewalld:
