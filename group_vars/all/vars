@@ -25,3 +25,8 @@ insecure_registries:
 # Private docker registry url to pull image from
 # URL should end with the trailing slash
 docker_registry: docker.{{ domain_name }}/
+
+# LDAP configuration
+ldap_server: "{{ dns_servers[0] }}"
+ldap_port: 389
+ldap_bind_password: " {{ vault_ldap_bind_password }}"

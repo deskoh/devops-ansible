@@ -8,6 +8,8 @@ Install the following on CentOS servers.
 * JFrog Artifactory / yum repo
 * Grafana / Prometheus
 
+> Variable secrets can be encrypted using `ansible-vault` by running `./encrypt.sh`. The vault password can be provided in `.vault_pass` as defined in `ansible.cfg`.
+
 ## Pre-Conditions
 
 ### Server List / Configuration
@@ -29,6 +31,8 @@ Install the following on CentOS servers.
 * Grafana / Prometheus
 
   * Mimimum 50GB raw disk `/dev/sdb`
+
+* LDAP Server for Single-Sign-On
 
 ### DNS Entries
 
@@ -140,7 +144,7 @@ lv_config:
 * Jenkins: `cat /var/lib/jenkins_home/secrets/initialAdminPassword`
 * Grafana: admin / admin
 
-## SSH Keys setup
+## Cheatsheet
 
 ```sh
 # Create RSA key pair on host
@@ -165,4 +169,8 @@ ansible-playbook -K -i hosts --limit jenkins-slave-1 site.yml --check
 # Test
 ansible-playbook -v -i hosts site.yml --syntax-check
 ansible-playbook -v -i jenkins, site.yml --syntax-check
+
+# Debug variables
+ansible -i hosts -m debug -a 'var=hostvars[inventory_hostname]' jenkins
+ansible -i hosts -m debug -a 'var=ldap_server' jenkins
 ```

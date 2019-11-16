@@ -25,3 +25,4 @@ install:
 script:
   # Basic syntax check
   - ansible-playbook site.yml -i hosts --syntax-check
+  - ansible -i hosts -m debug -a 'var=hostvars[inventory_hostname]' all
