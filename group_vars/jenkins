@@ -1,4 +1,6 @@
 ---
+jenkins_home: /var/jenkins_home
+
 # Raw disk to create partition, physical volume and data volume group on.
 # Volume group will be named `data_vg_name`
 pv_device: /dev/sdb
@@ -6,4 +8,4 @@ pv_device: /dev/sdb
 # Logical volumes to create for bind mount
 lv_config:
   - { path: /var/lib/docker, size: 128g, name: var_lib_docker }
-  - { path: /var/jenkins_home, size: 120g, name: jenkins, uid: 1000 }
+  - { path: "{{ jenkins_home }}", size: 120g, name: jenkins, uid: 1000 }

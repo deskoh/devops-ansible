@@ -4,23 +4,31 @@
     database: passwd
     key: "1000"
 
-- name: change ownership of /var/jenkins_home
+- name: change ownership of {{ jenkins_home }}
   file:
-    path: /var/jenkins_home
+    path: "{{ jenkins_home }}"
     owner: "{{ lookup('dict', getent_passwd).key }}"
 
 - name: deploy Jenkins Master startup script
   template:
-      src: jenkins.sh.j2
-      dest: /tmp/jenkins.sh
-      mode: "0755"
+    src: jenkins.sh.j2
+    dest: /tmp/jenkins.sh
+    mode: "0755"
   when: '"slave" not in inventory_hostname'
 
 - name: deploy Jenkins Agent startup script
   template:
-      src: jenkins-agent.sh.j2
-      dest: /tmp/jenkins.sh
-      mode: "0755"
+    src: jenkins-agent.sh.j2
+    dest: /tmp/jenkins.sh
+    mode: "0755"
+  when: '"slave" in inventory_hostname'
+
+- name: deploy npmrc file
+  template:
+    src: npmrc.j2
+    dest: "{{ jenkins_home }}/.npmrc"
+    mode: "700"
+    owner: "1000"
   when: '"slave" in inventory_hostname'
 
 - name: configure firewall
