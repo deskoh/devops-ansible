@@ -3,4 +3,4 @@ docker run -d --name jenkins-agent --restart=always \
   -v {{ jenkins_home }}:/var/jenkins_home \
   -v {{ jenkins_home }}/.npmrc:/home/jenkins/.npmrc:ro \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  {{ docker_registry }}deskoh/jenkins-agent-docker -url http://jenkins.{{ domain_name }}:8080 <secret> <worker name>
+  {{ docker_registry }}deskoh/jenkins-agent-docker -url http://jenkins.{{ domain_name }} <secret> <worker name>
