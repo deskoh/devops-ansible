@@ -26,9 +26,9 @@ insecure_registries:
 # URL should end with the trailing slash
 docker_registry: docker.{{ domain_name }}/
 
-npm_registry: repo.{{ domain_name }}/npm/npm
-sass_binary_site: repo.{{ domain_name }}/generic/sass
-electron_mirror: repo.{{ domain_name }}/generic/electron
+npm_registry: http://repo.{{ domain_name }}/artifactory/api/npm/npm/
+sass_binary_site: http://repo.{{ domain_name }}/artifactory/generic/node-sass
+electron_mirror: http://repo.{{ domain_name }}/artifactory/generic/electron
 
 # LDAP configuration
 ldap_server: "{{ dns_servers[0] }}"

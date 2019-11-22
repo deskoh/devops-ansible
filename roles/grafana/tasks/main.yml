@@ -9,7 +9,8 @@
   template:
     src: grafana-ldap.toml.j2
     dest: "{{ docker_vol_mount_dir }}/grafana-ldap.toml"
-    mode: "472"
+    owner: "472"
+    mode: "644"
   # TODO: restart of grafana container if changed
 
 - name: creating docker mounts for prometheus

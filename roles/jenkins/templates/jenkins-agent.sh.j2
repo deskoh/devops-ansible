@@ -1,5 +1,6 @@
 docker run -d --name jenkins-agent --restart=always \
   --group-add `stat -c %g /var/run/docker.sock` \
+  -e SASS_BINARY_SITE={{ sass_binary_site }} \
   -v {{ jenkins_home }}:/var/jenkins_home \
   -v {{ jenkins_home }}/.npmrc:/home/jenkins/.npmrc:ro \
   -v /var/run/docker.sock:/var/run/docker.sock \

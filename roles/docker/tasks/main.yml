@@ -35,6 +35,16 @@
     - docker-ce-cli-{{ docker_version }}-3.el7.x86_64.rpm
   when: docker_version.stdout != ''
 
+- name: copy Docker daemon configuration.
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    backup: yes
+  notify:
+    - reload docker
+
 - name: start service docker, if not started
   service:
     name: docker
@@ -47,16 +57,6 @@
 #     name: "{{ ansible_user_id }}"
 #     groups: docker
 #     append: true
-
-- name: copy Docker daemon configuration.
-  template:
-    src: daemon.json.j2
-    dest: /etc/docker/daemon.json
-    owner: root
-    group: root
-    backup: yes
-  notify:
-    - reload docker
 
 - name: set ip forwarding in sysctl file and reload if necessary
   sysctl:
