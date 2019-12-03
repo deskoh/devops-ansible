@@ -3,3 +3,4 @@
 - import_playbook: repo.yml
 - import_playbook: grafana.yml
 - import_playbook: jenkins.yml
+- import_playbook: gitlab.yml

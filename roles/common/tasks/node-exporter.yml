@@ -48,7 +48,7 @@
     src: node_exporter.service.j2
     dest: /etc/systemd/system/node_exporter.service
   notify:
-    - reload node_exporter
+    - restart node_exporter
 
 - name: start node_exporter
   service:
