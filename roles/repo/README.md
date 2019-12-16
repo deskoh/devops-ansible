@@ -1,17 +1,25 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Setup Artifactory with NGINX as reverse proxy.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Docker is required.
+
+**Optional:** For convenience, the following DNS entries is required for docker domain name alias (see Repository layout for more infomation).
+
+* cr.io
+
+* p.cr.io
+
+* m.cr.io
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+N.A.
 
 Dependencies
 ------------
@@ -27,12 +35,45 @@ Including an example of how to use your role (for instance, with variables passe
       roles:
          - { role: username.rolename, x: 42 }
 
-License
--------
-
-BSD
-
-Author Information
+Post-Configuration
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+### Repository Layout
+
+#### NPM
+
+`npm-mirror`: Mirror for packages on `registry.npmjs.org`. This repo has restricted access control for deployment.
+
+`npm-private`: Private / Project NPM packages.
+
+`npm-public`: Staging repo for `npm-mirror` public contribution.
+
+`npm`: Virtual repo for `npm-mirror`, `npm-private` and `npm-public` (Default publish repo).
+
+#### Docker
+
+For convenience, NGINX configuration also creates shorterned URL alias `cr.io` for the following Docker repositories.
+
+`docker-mirror` (`m.cr.io`): Mirror for images on `Docker Hub`. This repo has restricted access control for deployment.
+
+`docker-private` (`p.cr.io`): Private / Project images.
+
+`docker-public`: Staging repo for `docker-mirror` public contribution.
+
+`docker` (`cr.io`): Virtual repo for `docker-mirror`, `docker-private` and `docker-public`.
+
+### Access Control Design
+
+All LDAP users should have `Developer` permission as described below.
+
+**Groups**: A `LDAP Users` group is created with *Automatically Join New Users to this Group* enabled.
+
+**Permissions**: A `Developer` permission is created and applied to `LDAP Users` group to allow all repositories actions except `manage` for the following repositories:
+
+* `docker-private`
+
+* `docker-public`
+
+* `npm-private`
+
+* `npm-public`
