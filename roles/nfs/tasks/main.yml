@@ -1,0 +1,3 @@
+---
+- name: configure nfs
+  import_tasks: nfs.yml

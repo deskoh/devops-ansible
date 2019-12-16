@@ -1,0 +1,7 @@
+- hosts: backup
+  become: yes
+  gather_facts: no
+  roles:
+    - common
+    - logical-volume
+    - nfs

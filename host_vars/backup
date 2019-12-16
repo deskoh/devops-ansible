@@ -1,0 +1,15 @@
+---
+# Raw disk to create partition, physical volume and data volume group on.
+# Volume group will be named `data_vg_name`
+pv_device: /dev/sdb
+
+# Logical volumes to create for bind mount
+lv_config:
+  - { path: /backup/gitlab, size: 2T, name: backup_gitlab }
+  - { path: /backup, size: 2T, name: backup }
+
+nfs_exports:
+  - dir: /backup/gitlab
+    acl: 130.8.20.140(rw,sync,no_subtree_check,no_root_squash)
+  - dir: /backup/ad
+    acl: 130.8.20.130(rw,sync,no_subtree_check,no_root_squash)

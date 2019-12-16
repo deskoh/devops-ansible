@@ -1,0 +1,42 @@
+- name: install latest version of rpcbind and nfs-utils
+  yum:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - nfs-utils
+    - rpcbind
+
+- name: start nfs services, if not started
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop:
+    - rpcbind
+    - nfs-server
+    - nfs-lock
+    - nfs-idmap
+  when: nfs_exports|length
+
+- name: configure firewall
+  firewalld:
+    service: nfs
+    permanent: yes
+    state: enabled
+
+- name: ensure directories for exports exists
+  file:
+    path: "{{ item.dir }}"
+    state: directory
+    owner: nfsnobody
+    mode: "0755"
+  loop: "{{ nfs_exports }}"
+
+- name: copy exports file
+  template:
+    src: exports.j2
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: "0644"
+  notify: reload nfs

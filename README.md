@@ -144,7 +144,7 @@ lv_config:
 * Jenkins: `cat /var/lib/jenkins_home/secrets/initialAdminPassword`
 * Grafana: admin / admin
 
-## Cheatsheet
+## SSH Keys setup
 
 ```sh
 # Create RSA key pair on host

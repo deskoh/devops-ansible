@@ -1,0 +1,6 @@
+---
+# NFS exports entries, e.g.
+# nfs_exports:
+#   - dir: /dir1
+#     acl: *(rw,sync,no_subtree_check,no_root_squash)
+nfs_exports: []

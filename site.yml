@@ -1,5 +1,6 @@
 ---
 - import_playbook: ansible-host.yml
+- import_playbook: backup.yml
 - import_playbook: repo.yml
 - import_playbook: grafana.yml
 - import_playbook: jenkins.yml
