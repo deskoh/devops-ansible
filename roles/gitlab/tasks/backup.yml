@@ -1,0 +1,29 @@
+- name: install latest version of nfs-utils
+  yum:
+    name: nfs-utils
+    state: latest
+
+- name: mount nfs share
+  mount:
+    fstype: nfs
+    opts: defaults
+    src: "{{ hostvars['backup']['ansible_host'] }}:/backup/gitlab"
+    path: "{{ backup_nfs_mount }}"
+    state: mounted
+
+# Change /var/gitlab/etc/gitlab.rb gitlab_rails['backup_keep_time'] = 604800
+
+- name: create gitlab backup script
+  template:
+    src: gitlab_backup.sh.j2
+    dest: /root/gitlab_backup.sh
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: create gitlab backup cron
+  cron:
+    name: backup gitlab
+    minute: "0"
+    hour: "2"
+    job: /root/gitlab_backup.sh

@@ -1,0 +1,9 @@
+---
+# gitlab backup nfs mount path
+backup_nfs_mount: /mnt/nfs/backup
+
+# gitlab data directory (mounted to /var/opt/gitlab in container)
+gitlab_data: /var/gitlab/data
+
+# gitlab config directory (mounted to /etc/gitlab in container)
+gitlab_config: /var/gitlab/etc

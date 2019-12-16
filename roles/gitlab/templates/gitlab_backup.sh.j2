@@ -1,0 +1,3 @@
+docker exec -t gitlab gitlab-backup create RAILS_ENV=production CRON=1
+rsync -a {{ gitlab_data }}/backups/ {{ backup_nfs_mount }}/data
+rsync -a {{ gitlab_config }}/ {{ backup_nfs_mount }}/config
