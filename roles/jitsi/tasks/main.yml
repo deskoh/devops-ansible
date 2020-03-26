@@ -1,0 +1,23 @@
+---
+- name: creating docker mounts for jitsi
+  file:
+    path: "{{ docker_vol_mount_dir }}/jitsi"
+    state: directory
+
+- name: deploy docker create script
+  template:
+    src: docker-create.sh.j2
+    dest: /root/docker-create.sh
+    mode: "0755"
+
+- name: configure firewall port 80
+  firewalld:
+    service: http
+    permanent: yes
+    state: enabled
+
+- name: configure firewall port 443
+  firewalld:
+    port: 443/tcp
+    permanent: yes
+    state: enabled

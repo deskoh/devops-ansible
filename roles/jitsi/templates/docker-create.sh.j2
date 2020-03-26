@@ -1,0 +1,95 @@
+docker network create meet.jitsi
+
+# Frontend
+docker create --name web --network meet.jitsi --network-alias meet.jitsi \
+  -p 443:443 \
+  -v {{ docker_vol_mount_dir }}/jitsi/web:/config \
+  -v {{ docker_vol_mount_dir }}/jitsi/web/letsencrypt:/etc/letsencrypt \
+  -v {{ docker_vol_mount_dir }}/jitsi/transcripts:/usr/share/jitsi-meet/transcripts \
+  -e JICOFO_AUTH_USER=focus \
+  -e PUBLIC_URL=https://jitsi.{{ domain_name }} \
+  -e XMPP_DOMAIN=meet.jitsi \
+  -e XMPP_AUTH_DOMAIN=auth.meet.jitsi \
+  -e XMPP_BOSH_URL_BASE=http://xmpp.meet.jitsi:5280 \
+  -e XMPP_GUEST_DOMAIN=guest.meet.jitsi \
+  -e XMPP_MUC_DOMAIN=muc.meet.jitsi \
+  -e XMPP_RECORDER_DOMAIN=recorder.meet.jitsi \
+  -e TZ=Asia/Singapore \
+  -e JIBRI_BREWERY_MUC=jibribrewery \
+  -e JIBRI_PENDING_TIMEOUT=90 \
+  -e JIBRI_XMPP_USER=jibri \
+  -e JIBRI_XMPP_PASSWORD=passw0rd \
+  -e JIBRI_RECORDER_USER=recorder \
+  -e JIBRI_RECORDER_PASSWORD=passw0rd \
+  -e ENABLE_RECORDING=0 \
+  cr.io/jitsi/web:4101-1
+
+# XMPP server
+docker create --name prosody --network meet.jitsi --network-alias xmpp.meet.jitsi \
+  --expose 5222 --expose 5347 --expose 5280 \
+  -v {{ docker_vol_mount_dir }}/jitsi/prosody:/config \
+  -e XMPP_DOMAIN=meet.jitsi \
+  -e XMPP_AUTH_DOMAIN=auth.meet.jitsi \
+  -e XMPP_GUEST_DOMAIN=guest.meet.jitsi \
+  -e XMPP_MUC_DOMAIN=muc.meet.jitsi \
+  -e XMPP_INTERNAL_MUC_DOMAIN=internal-muc.meet.jitsi \
+  -e XMPP_MODULES= \
+  -e XMPP_MUC_MODULES= \
+  -e XMPP_INTERNAL_MUC_MODULES= \
+  -e XMPP_RECORDER_DOMAIN=recorder.meet.jitsi \
+  -e JICOFO_COMPONENT_SECRET=s3cr37 \
+  -e JICOFO_AUTH_USER=focus \
+  -e JICOFO_AUTH_PASSWORD=passw0rd \
+  -e JVB_AUTH_USER=jvb \
+  -e JVB_AUTH_PASSWORD=passw0rd \
+  -e JIGASI_XMPP_USER=jigasi \
+  -e JIGASI_XMPP_PASSWORD=passw0rd \
+  -e JIBRI_XMPP_USER=jibri \
+  -e JIBRI_XMPP_PASSWORD=passw0rd \
+  -e JIBRI_RECORDER_USER=recorder \
+  -e JIBRI_RECORDER_PASSWORD=passw0rd \
+  -e TZ=Asia/Singapore \
+  cr.io/jitsi/prosody:4101-1
+
+# Focus component
+docker create --name jicofo --network meet.jitsi \
+  -v {{ docker_vol_mount_dir }}/jitsi/jicofo:/config \
+  -e XMPP_DOMAIN=meet.jitsi \
+  -e XMPP_AUTH_DOMAIN=auth.meet.jitsi \
+  -e XMPP_INTERNAL_MUC_DOMAIN=internal-muc.meet.jitsi \
+  -e XMPP_SERVER=xmpp.meet.jitsi \
+  -e JICOFO_COMPONENT_SECRET=s3cr37 \
+  -e JICOFO_AUTH_USER=focus \
+  -e JICOFO_AUTH_PASSWORD=passw0rd \
+  -e JVB_BREWERY_MUC=jvbbrewery \
+  -e JIGASI_BREWERY_MUC=jigasibrewery \
+  -e JIBRI_BREWERY_MUC=jibribrewery \
+  -e JIBRI_PENDING_TIMEOUT=90 \
+  -e TZ  -e TZ=Asia/Singapore \
+  cr.io/jitsi/jicofo:4101-1
+
+# Video bridge
+docker create --name jvb --network meet.jitsi \
+  -p 80:4443 \
+  -v {{ docker_vol_mount_dir }}/jitsi/jvb:/config \
+  -e DOCKER_HOST_ADDRESS={{ ansible_host }} \
+  -e XMPP_AUTH_DOMAIN=auth.meet.jitsi \
+  -e XMPP_INTERNAL_MUC_DOMAIN=internal-muc.meet.jitsi \
+  -e XMPP_SERVER=xmpp.meet.jitsi \
+  -e JVB_AUTH_USER=jvb \
+  -e JVB_AUTH_PASSWORD=passw0rd \
+  -e JVB_BREWERY_MUC=jvbbrewery \
+  -e JVB_PORT=10000 \
+  -e JVB_TCP_HARVESTER_DISABLED=false \
+  -e JVB_TCP_PORT=4443 \
+  -e TZ=Asia/Singapore \
+  cr.io/jitsi/jvb:4101-1
+
+# Note: Add the following lines to `/data/jitsi/jvb/sip-communicator.properties`
+# org.jitsi.videobridge.TCP_HARVESTER_MAPPED_PORT=80
+
+docker start web
+docker start prosody
+# Wait for prosody
+docker start jicofo
+docker start jvb

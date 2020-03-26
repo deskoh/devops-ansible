@@ -5,3 +5,4 @@
 - import_playbook: grafana.yml
 - import_playbook: jenkins.yml
 - import_playbook: gitlab.yml
+- import_playbook: jitsi.yml

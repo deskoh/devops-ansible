@@ -1,0 +1,8 @@
+- hosts: jitsi
+  become: yes
+  gather_facts: no
+  roles:
+    - common
+    - logical-volume
+    - docker
+    - jitsi
