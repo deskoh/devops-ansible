@@ -1,3 +1,8 @@
 ---
 - name: reload nfs
   command: exportfs -r
+
+- name: reload firewalld
+  service:
+    name: firewalld
+    state: reloaded

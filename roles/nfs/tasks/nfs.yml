@@ -23,6 +23,7 @@
     service: nfs
     permanent: yes
     state: enabled
+  notify: reload firewalld
 
 - name: ensure directories for exports exists
   file:
