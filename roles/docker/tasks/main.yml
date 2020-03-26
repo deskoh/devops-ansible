@@ -9,8 +9,8 @@
     dest: "/tmp/{{ item }}"
   with_items:
     - containerd.io-{{ containerd_version }}.el7.x86_64.rpm
-    - docker-ce-{{ docker_version }}-3.el7.x86_64.rpm
-    - docker-ce-cli-{{ docker_version }}-3.el7.x86_64.rpm
+    - docker-ce-{{ docker_ce_version }}-3.el7.x86_64.rpm
+    - docker-ce-cli-{{ docker_ce_version }}-3.el7.x86_64.rpm
   when: docker_version.stdout == ''
 
 - name: installing docker
@@ -21,8 +21,8 @@
   vars:
     packages:
       - /tmp/containerd.io-{{ containerd_version }}.el7.x86_64.rpm
-      - /tmp/docker-ce-{{ docker_version }}-3.el7.x86_64.rpm
-      - /tmp/docker-ce-cli-{{ docker_version }}-3.el7.x86_64.rpm
+      - /tmp/docker-ce-{{ docker_ce_version }}-3.el7.x86_64.rpm
+      - /tmp/docker-ce-cli-{{ docker_ce_version }}-3.el7.x86_64.rpm
   when: docker_version.stdout == ''
 
 - name: clean up docker installer files
@@ -31,9 +31,16 @@
     state: absent
   with_items:
     - containerd.io-{{ containerd_version }}.el7.x86_64.rpm
-    - docker-ce-{{ docker_version }}-3.el7.x86_64.rpm
-    - docker-ce-cli-{{ docker_version }}-3.el7.x86_64.rpm
+    - docker-ce-{{ docker_ce_version }}-3.el7.x86_64.rpm
+    - docker-ce-cli-{{ docker_ce_version }}-3.el7.x86_64.rpm
   when: docker_version.stdout != ''
+
+- name: create /etc/docker if it does not exist
+  file:
+    path: /etc/docker
+    state: directory
+    owner: root
+    group: root
 
 - name: copy Docker daemon configuration.
   template:
