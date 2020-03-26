@@ -23,6 +23,9 @@
 - name: configure node-exporter
   import_tasks: node-exporter.yml
 
+- name: configure time sync
+  import_tasks: ntp.yml
+
 # - name: Set authorized key for user1
 #   authorized_key:
 #     user: user1

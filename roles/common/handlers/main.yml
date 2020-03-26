@@ -13,3 +13,8 @@
   service:
     name: firewalld
     state: reloaded
+
+- name: reload ntpd
+  service:
+    name: ntpd
+    state: restarted
