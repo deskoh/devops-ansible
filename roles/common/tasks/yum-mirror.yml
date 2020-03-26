@@ -5,8 +5,8 @@
     name: "{{ item.name }}-mirror"
     description: "CentOS-$releasever - {{ item.description }}"
     baseurl: "{{ yum_server_url }}/centos-{{ item.name }}"
-    gpgcheck: no
-    # gpgkey: "{{ yum_server_url }}/rpm-gpg/RPM-GPG-KEY-centos-{{ item.name }}"
+    gpgcheck: yes
+    gpgkey: "{{ yum_server_url }}/rpm-gpg/RPM-GPG-KEY-centos-{{ item.name }}"
     enabled: yes
   loop:
     - { name: base, description: Base }
